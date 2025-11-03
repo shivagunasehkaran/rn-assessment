@@ -43,9 +43,44 @@ export const selectTrackIdsByQuery = createSelector(
   }
 );
 
+export const selectTracksByQuery = createSelector(
+  [selectTrackIdsByQuery, (state: RootState) => selectTracksState(state).entities],
+  (trackIds, entities): TrackEntity[] =>
+    trackIds
+      .map((id) => entities[id])
+      .filter((track): track is TrackEntity => Boolean(track))
+);
+
 export const selectHasMoreByQuery = createSelector(
   [selectTracksState, (_: RootState, query: string) => query],
   (tracksState, query): boolean => tracksState.pageMeta[query]?.hasMore ?? false
+);
+
+export const selectPaginationMetaByQuery = createSelector(
+  [selectTracksState, (_: RootState, query: string) => query],
+  (tracksState, query) => {
+    const pages = tracksState.pages[query];
+    if (!pages) {
+      return {
+        offsets: [] as number[],
+        lastOffset: -1,
+        hasMore: false,
+      };
+    }
+
+    const offsets = Object.keys(pages)
+      .map((offsetKey) => Number(offsetKey))
+      .sort((a, b) => a - b);
+
+    const lastOffset = offsets.length > 0 ? offsets[offsets.length - 1] : -1;
+    const hasMore = tracksState.pageMeta[query]?.hasMore ?? false;
+
+    return {
+      offsets,
+      lastOffset,
+      hasMore,
+    };
+  }
 );
 
 export const selectStatusByKey = createSelector(
