@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { colors } from "../theme/colors";
+
 interface TrackCardProps {
   title: string;
   artist: string;
@@ -12,7 +14,7 @@ const FALLBACK_IMAGE = "https://placehold.co/64x64?text=♪";
 
 const TrackCardComponent = ({ title, artist, imageUrl, onPress }: TrackCardProps) => {
   return (
-    <Pressable style={styles.card} onPress={onPress} android_ripple={{ color: "#e5e7eb" }}>
+    <Pressable style={styles.card} onPress={onPress} android_ripple={{ color: colors.gray200 }}>
       <Image
         source={{ uri: imageUrl || FALLBACK_IMAGE }}
         style={styles.image}
@@ -36,8 +38,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 12,
     borderRadius: 12,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
+    backgroundColor: colors.surface,
+    shadowColor: colors.black,
     shadowOpacity: 0.05,
     shadowRadius: 6,
     elevation: 2,
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 8,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.gray200,
   },
   meta: {
     flex: 1,
@@ -55,12 +57,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#111827",
+    color: colors.text.primary,
   },
   artist: {
     marginTop: 4,
     fontSize: 14,
-    color: "#6b7280",
+    color: colors.text.secondary,
   },
 });
 

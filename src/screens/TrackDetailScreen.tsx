@@ -15,6 +15,8 @@ import Loader from "../components/Loader";
 import OfflineBanner from "../components/OfflineBanner";
 import TrackPlayer from "../components/TrackPlayer";
 import type { TrackDetail, TrackEntity } from "../features/tracks";
+import { colors } from "../theme/colors";
+import { strings } from "../strings";
 
 type TrackDetailScreenProps = {
   track?: TrackEntity | TrackDetail;
@@ -66,9 +68,9 @@ const TrackDetailScreenComponent = ({
 
   const metadata = useMemo(
     () => [
-      { label: "Album", value: detail?.albumName ?? "—" },
-      { label: "Duration", value: formatDuration(detail?.duration) },
-      { label: "Released", value: formatReleaseDate(detail?.releaseDate) },
+      { label: strings.trackDetailMetadata.album, value: detail?.albumName ?? "—" },
+      { label: strings.trackDetailMetadata.duration, value: formatDuration(detail?.duration) },
+      { label: strings.trackDetailMetadata.released, value: formatReleaseDate(detail?.releaseDate) },
     ],
     [detail?.albumName, detail?.duration, detail?.releaseDate]
   );
@@ -92,7 +94,7 @@ const TrackDetailScreenComponent = ({
   if (!track) {
     return (
       <SafeAreaView style={styles.fallbackContainer}>
-        <ErrorState message="Track not found." onRetry={onBack} />
+        <ErrorState message={strings.trackDetailNotFound} onRetry={onBack} />
       </SafeAreaView>
     );
   }
@@ -114,10 +116,14 @@ const TrackDetailScreenComponent = ({
       <OfflineBanner visible={isOffline} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Pressable style={styles.backLink} onPress={onBack}>
-          <Text style={styles.backText}>{"‹ Back"}</Text>
+          <Text style={styles.backText}>{strings.trackDetailBack}</Text>
         </Pressable>
 
-        <Image source={imageSource} style={styles.heroArtwork} resizeMode="cover" />
+        <Image
+          source={imageSource}
+          style={styles.heroArtwork}
+          resizeMode="cover"
+        />
 
         <View style={styles.header}>
           <Text style={styles.title}>{track.name}</Text>
@@ -135,7 +141,7 @@ const TrackDetailScreenComponent = ({
         />
 
         <View style={styles.metadataSection}>
-          <Text style={styles.sectionHeading}>Track Info</Text>
+          <Text style={styles.sectionHeading}>{strings.trackDetailTitle}</Text>
           <View style={styles.metadataGrid}>
             {metadata.map((entry) => (
               <View key={entry.label} style={styles.metadataItem}>
@@ -148,12 +154,12 @@ const TrackDetailScreenComponent = ({
           <View style={styles.linksRow}>
             {detail?.licenseUrl ? (
               <Pressable style={styles.linkButton} onPress={handleLicense}>
-                <Text style={styles.linkText}>View License</Text>
+                <Text style={styles.linkText}>{strings.trackDetailActions.viewLicense}</Text>
               </Pressable>
             ) : null}
             {detail?.shareUrl ? (
               <Pressable style={styles.linkButton} onPress={handleShare}>
-                <Text style={styles.linkText}>Open on Jamendo</Text>
+                <Text style={styles.linkText}>{strings.trackDetailActions.openOnJamendo}</Text>
               </Pressable>
             ) : null}
           </View>
@@ -162,11 +168,13 @@ const TrackDetailScreenComponent = ({
         {isRefreshing ? (
           <View style={styles.refreshing}>
             <Loader size="small" />
-            <Text style={styles.refreshingText}>Refreshing track details…</Text>
+            <Text style={styles.refreshingText}>{strings.trackDetailRefreshing}</Text>
           </View>
         ) : null}
 
-        {error && track ? <ErrorState message={error} onRetry={onRetry} /> : null}
+        {error && track ? (
+          <ErrorState message={error} onRetry={onRetry} />
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -177,7 +185,7 @@ export default memo(TrackDetailScreenComponent);
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 16,
@@ -185,7 +193,7 @@ const styles = StyleSheet.create({
   },
   fallbackContainer: {
     flex: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -195,7 +203,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   backText: {
-    color: "#2563eb",
+    color: colors.primary,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -203,7 +211,7 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 1,
     borderRadius: 20,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.gray200,
   },
   header: {
     gap: 8,
@@ -211,11 +219,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text.primary,
   },
   subtitle: {
     fontSize: 16,
-    color: "#6b7280",
+    color: colors.text.secondary,
     fontWeight: "500",
   },
   metadataSection: {
@@ -224,7 +232,7 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text.primary,
   },
   metadataGrid: {
     flexDirection: "row",
@@ -236,13 +244,13 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metadataLabel: {
-    color: "#6b7280",
+    color: colors.text.secondary,
     fontSize: 12,
     textTransform: "uppercase",
     letterSpacing: 0.6,
   },
   metadataValue: {
-    color: "#111827",
+    color: colors.text.primary,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -255,10 +263,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 999,
-    backgroundColor: "#e0f2fe",
+    backgroundColor: colors.blue50,
   },
   linkText: {
-    color: "#0369a1",
+    color: colors.blue600,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -268,8 +276,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   refreshingText: {
-    color: "#6b7280",
+    color: colors.text.secondary,
     fontSize: 14,
   },
 });
-

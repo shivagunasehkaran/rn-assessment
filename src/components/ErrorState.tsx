@@ -1,6 +1,9 @@
 import { memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { colors } from "../theme/colors";
+import { strings } from "../strings";
+
 interface ErrorStateProps {
   message: string;
   onRetry?: () => void;
@@ -12,7 +15,7 @@ const ErrorStateComponent = ({ message, onRetry }: ErrorStateProps) => {
       <Text style={styles.message}>{message}</Text>
       {onRetry ? (
         <Pressable onPress={onRetry} style={styles.button}>
-          <Text style={styles.buttonText}>Retry</Text>
+          <Text style={styles.buttonText}>{strings.retry}</Text>
         </Pressable>
       ) : null}
     </View>
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    color: "#b91c1c",
+    color: colors.error,
     textAlign: "center",
   },
   button: {
@@ -36,10 +39,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: "#111827",
+    backgroundColor: colors.gray900,
   },
   buttonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -48,4 +51,3 @@ const styles = StyleSheet.create({
 export const ErrorState = memo(ErrorStateComponent);
 
 export default ErrorState;
-

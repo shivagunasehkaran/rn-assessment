@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+import { colors } from "../theme/colors";
+
 interface EmptyStateProps {
   message: string;
 }
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    color: "#6b7280",
+    color: colors.text.secondary,
     textAlign: "center",
   },
 });

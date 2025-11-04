@@ -1,6 +1,9 @@
 import { memo } from "react";
 import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
+import { colors } from "../theme/colors";
+import { strings } from "../strings";
+
 interface SearchBarProps {
   value: string;
   placeholder?: string;
@@ -26,7 +29,7 @@ const SearchBarComponent = ({ value, placeholder, onChangeText, autoFocus }: Sea
         <Pressable
           onPress={() => onChangeText("")}
           accessibilityRole="button"
-          accessibilityLabel="Clear search text"
+          accessibilityLabel={strings.clearSearch}
           style={styles.clearButton}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
@@ -41,17 +44,17 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.border,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     flexDirection: "row",
     alignItems: "center",
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: "#111827",
+    color: colors.text.primary,
     paddingRight: 8,
   },
   clearButton: {
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
   },
   clearText: {
     fontSize: 18,
-    color: "#9ca3af",
+    color: colors.text.tertiary,
     lineHeight: 18,
   },
 });

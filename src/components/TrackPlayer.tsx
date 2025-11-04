@@ -9,6 +9,8 @@ import {
   View,
 } from "react-native";
 import { useTrackPlayer } from "../hooks/useTrackPlayer";
+import { colors } from "../theme/colors";
+import { strings } from "../strings";
 
 type TrackPlayerProps = {
   trackId: string;
@@ -71,9 +73,9 @@ const TrackPlayerComponent = ({
   if (!isAvailable) {
     return (
       <View style={styles.unavailableContainer}>
-        <Text style={styles.unavailableTitle}>Audio playback unavailable</Text>
+        <Text style={styles.unavailableTitle}>{strings.playerUnavailable}</Text>
         <Text style={styles.unavailableSubtitle}>
-          Create a development build to enable the Jamendo player.
+          {strings.playerUnavailableSubtitle}
         </Text>
       </View>
     );
@@ -159,23 +161,27 @@ const TrackPlayerComponent = ({
           style={styles.secondaryButton}
           onPress={() => seekBack(15000)}
           accessibilityRole="button"
-          accessibilityLabel="Seek backward"
+          accessibilityLabel={strings.playerSeekBackLabel}
         >
-          <Text style={styles.secondaryButtonText}>{"« 15s"}</Text>
+          <Text style={styles.secondaryButtonText}>
+            {strings.playerSeekBack}
+          </Text>
         </Pressable>
 
         <Pressable
           style={styles.primaryButton}
           onPress={togglePlay}
           accessibilityRole="button"
-          accessibilityLabel={isPlaying ? "Pause playback" : "Play track"}
+          accessibilityLabel={
+            isPlaying ? strings.playerPauseLabel : strings.playerPlayLabel
+          }
           disabled={isBusy}
         >
           {isBusy ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.white} />
           ) : (
             <Text style={styles.primaryButtonText}>
-              {isPlaying ? "Pause" : "Play"}
+              {isPlaying ? strings.playerPause : strings.playerPlay}
             </Text>
           )}
         </Pressable>
@@ -184,9 +190,11 @@ const TrackPlayerComponent = ({
           style={styles.secondaryButton}
           onPress={() => seekForward(15000)}
           accessibilityRole="button"
-          accessibilityLabel="Seek forward"
+          accessibilityLabel={strings.playerSeekForwardLabel}
         >
-          <Text style={styles.secondaryButtonText}>{"15s »"}</Text>
+          <Text style={styles.secondaryButtonText}>
+            {strings.playerSeekForward}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -200,22 +208,22 @@ export default TrackPlayer;
 const styles = StyleSheet.create({
   unavailableContainer: {
     borderRadius: 16,
-    backgroundColor: "#fef3c7",
+    backgroundColor: colors.yellow50,
     padding: 16,
     gap: 8,
   },
   unavailableTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#92400e",
+    color: colors.warning,
   },
   unavailableSubtitle: {
     fontSize: 14,
-    color: "#b45309",
+    color: colors.yellow600,
   },
   container: {
     borderRadius: 16,
-    backgroundColor: "#111827",
+    backgroundColor: colors.player.background,
     padding: 16,
     gap: 16,
   },
@@ -227,7 +235,7 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 12,
-    backgroundColor: "#1f2937",
+    backgroundColor: colors.player.surface,
   },
   headerMeta: {
     flex: 1,
@@ -235,17 +243,17 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   title: {
-    color: "#f9fafb",
+    color: colors.player.text,
     fontSize: 18,
     fontWeight: "700",
   },
   artist: {
-    color: "#d1d5db",
+    color: colors.player.textSecondary,
     fontSize: 14,
     fontWeight: "500",
   },
   album: {
-    color: "#9ca3af",
+    color: colors.player.textTertiary,
     fontSize: 12,
   },
   progressContainer: {
@@ -255,18 +263,18 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     overflow: "hidden",
-    backgroundColor: "#374151",
+    backgroundColor: colors.gray700,
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#60a5fa",
+    backgroundColor: colors.player.progress,
   },
   progressLabels: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   progressLabel: {
-    color: "#d1d5db",
+    color: colors.player.textSecondary,
     fontSize: 12,
   },
   controlsRow: {
@@ -278,13 +286,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 999,
-    backgroundColor: "#2563eb",
+    backgroundColor: colors.primary,
     minWidth: 96,
     alignItems: "center",
     justifyContent: "center",
   },
   primaryButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -292,10 +300,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 999,
-    backgroundColor: "#1f2937",
+    backgroundColor: colors.player.surface,
   },
   secondaryButtonText: {
-    color: "#f9fafb",
+    color: colors.player.text,
     fontSize: 14,
     fontWeight: "600",
   },

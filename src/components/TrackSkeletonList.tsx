@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { colors } from "../theme/colors";
+
 interface TrackSkeletonListProps {
   count?: number;
 }
@@ -31,13 +33,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 12,
     borderRadius: 12,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.gray100,
   },
   thumbnail: {
     width: 64,
     height: 64,
     borderRadius: 8,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.gray200,
   },
   meta: {
     flex: 1,
@@ -47,13 +49,13 @@ const styles = StyleSheet.create({
   title: {
     height: 16,
     borderRadius: 4,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.gray200,
     width: "70%",
   },
   subtitle: {
     height: 14,
     borderRadius: 4,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: colors.gray200,
     width: "50%",
   },
 });

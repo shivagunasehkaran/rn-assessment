@@ -10,6 +10,8 @@ import SearchBar from "../components/SearchBar";
 import TrackCard from "../components/TrackCard";
 import TrackSkeletonList from "../components/TrackSkeletonList";
 import type { TrackEntity } from "../features/tracks";
+import { colors } from "../theme/colors";
+import { strings } from "../strings";
 
 type TrackSearchScreenProps = {
   searchText: string;
@@ -60,7 +62,7 @@ const TrackSearchScreen = ({
 
   const listEmptyComponent = useMemo(() => {
     if (!hasActiveQuery) {
-      return <EmptyState message="Search tracks to get started." />;
+      return <EmptyState message={strings.searchEmpty} />;
     }
 
     if (isInitialLoading) {
@@ -71,7 +73,7 @@ const TrackSearchScreen = ({
       return <ErrorState message={listError} onRetry={onRetryInitial} />;
     }
 
-    return <EmptyState message="No matches. Try a different search." />;
+    return <EmptyState message={strings.searchNoMatches} />;
   }, [hasActiveQuery, isInitialLoading, listError, onRetryInitial]);
 
   const listFooterComponent = useMemo(() => {
@@ -82,7 +84,7 @@ const TrackSearchScreen = ({
     if (showLoadMoreHint) {
       return (
         <View style={styles.footerHint}>
-          <Text style={styles.footerHintText}>Scroll to load more</Text>
+          <Text style={styles.footerHintText}>{strings.searchScrollToLoadMore}</Text>
         </View>
       );
     }
@@ -93,11 +95,11 @@ const TrackSearchScreen = ({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.heading}>Jamendo Tracks</Text>
+        <Text style={styles.heading}>{strings.appName}</Text>
         <SearchBar
           value={searchText}
           onChangeText={onChangeSearchText}
-          placeholder="Search tracks..."
+          placeholder={strings.searchPlaceholder}
           autoFocus
         />
         <OfflineBanner visible={isOffline} />
@@ -109,8 +111,8 @@ const TrackSearchScreen = ({
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={onRefresh}
-              tintColor="#111827"
-              colors={["#111827"]}
+              tintColor={colors.text.primary}
+              colors={[colors.text.primary]}
             />
           }
           keyboardShouldPersistTaps="handled"
@@ -134,7 +136,7 @@ export default memo(TrackSearchScreen);
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text.primary,
     marginBottom: 12,
   },
   listContent: {
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
   },
   footerHintText: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: colors.text.tertiary,
   },
 });
 

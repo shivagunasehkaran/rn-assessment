@@ -1,4 +1,5 @@
 import type { ApiError } from "../../api/client";
+import { strings } from "../../strings";
 
 const STATUS_PREFIX = "tracks";
 
@@ -10,20 +11,20 @@ export const makeDetailKey = (id: string): string => `${STATUS_PREFIX}:detail:${
 export const mapApiErrorToMessage = (error: ApiError): string => {
   switch (error.code) {
     case "OFFLINE":
-      return "You appear to be offline. Showing cached results.";
+      return strings.error.offline;
     case "TIMEOUT":
-      return "The request timed out. Please try again.";
+      return strings.error.timeout;
     case "RATE_LIMITED":
-      return "We’re hitting Jamendo’s rate limit. Please retry in a moment.";
+      return strings.error.rateLimited;
     case "UNAUTHORIZED":
     case "FORBIDDEN":
-      return "Jamendo credentials are invalid. Check your client ID.";
+      return strings.error.unauthorized;
     case "NOT_FOUND":
-      return "We couldn’t find that track.";
+      return strings.error.notFound;
     case "SERVER_ERROR":
-      return "Jamendo is unavailable right now. Please try later.";
+      return strings.error.serverError;
     default:
-      return error.message || "Something went wrong.";
+      return error.message || strings.error.unknown;
   }
 };
 
