@@ -3,6 +3,10 @@ import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-na
 
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
+import {
+  getResponsiveFontSize,
+  getResponsivePadding,
+} from "../utils/responsive";
 
 interface SearchBarProps {
   value: string;
@@ -45,15 +49,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: getResponsivePadding(12),
+    paddingVertical: getResponsivePadding(8),
     backgroundColor: colors.surface,
     flexDirection: "row",
     alignItems: "center",
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     color: colors.text.primary,
     paddingRight: 8,
   },
@@ -61,9 +65,9 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   clearText: {
-    fontSize: 18,
+    fontSize: getResponsiveFontSize(18),
     color: colors.text.tertiary,
-    lineHeight: 18,
+    lineHeight: getResponsiveFontSize(18),
   },
 });
 

@@ -19,6 +19,11 @@ import { colors } from "../theme/colors";
 import { strings } from "../strings";
 import { formatDuration, formatReleaseDate } from "../utils/util";
 import { FALLBACK_ARTWORK_URI } from "../utils/constants";
+import {
+  getResponsiveFontSize,
+  getResponsivePadding,
+  SCREEN_DIMENSIONS,
+} from "../utils/responsive";
 
 type TrackDetailScreenProps = {
   track?: TrackEntity | TrackDetail;
@@ -170,21 +175,26 @@ const TrackDetailScreenComponent = ({
 
 export default memo(TrackDetailScreenComponent);
 
+const maxContentWidth = SCREEN_DIMENSIONS.isTablet ? 800 : undefined;
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
   },
   scrollContent: {
-    padding: 16,
-    gap: 24,
+    padding: getResponsivePadding(16),
+    gap: getResponsivePadding(24),
+    maxWidth: maxContentWidth,
+    alignSelf: "center",
+    width: "100%",
   },
   fallbackContainer: {
     flex: 1,
     backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
-    padding: 16,
+    padding: getResponsivePadding(16),
   },
   backLink: {
     alignSelf: "flex-start",
@@ -192,7 +202,7 @@ const styles = StyleSheet.create({
   },
   backText: {
     color: colors.primary,
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     fontWeight: "600",
   },
   heroArtwork: {
@@ -200,32 +210,34 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 20,
     backgroundColor: colors.gray200,
+    maxWidth: maxContentWidth ? 600 : undefined,
+    alignSelf: "center",
   },
   header: {
     gap: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: getResponsiveFontSize(24, 32),
     fontWeight: "700",
     color: colors.text.primary,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16, 20),
     color: colors.text.secondary,
     fontWeight: "500",
   },
   metadataSection: {
-    gap: 16,
+    gap: getResponsivePadding(16),
   },
   sectionHeading: {
-    fontSize: 20,
+    fontSize: getResponsiveFontSize(20, 26),
     fontWeight: "700",
     color: colors.text.primary,
   },
   metadataGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 16,
+    gap: getResponsivePadding(16),
   },
   metadataItem: {
     width: "48%",
@@ -233,29 +245,29 @@ const styles = StyleSheet.create({
   },
   metadataLabel: {
     color: colors.text.secondary,
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
     textTransform: "uppercase",
     letterSpacing: 0.6,
   },
   metadataValue: {
     color: colors.text.primary,
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16, 20),
     fontWeight: "600",
   },
   linksRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: getResponsivePadding(12),
     flexWrap: "wrap",
   },
   linkButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: getResponsivePadding(16),
+    paddingVertical: getResponsivePadding(10),
     borderRadius: 999,
     backgroundColor: colors.blue50,
   },
   linkText: {
     color: colors.blue600,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14, 16),
     fontWeight: "600",
   },
   refreshing: {
@@ -265,6 +277,6 @@ const styles = StyleSheet.create({
   },
   refreshingText: {
     color: colors.text.secondary,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
   },
 });

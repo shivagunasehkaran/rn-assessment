@@ -13,6 +13,11 @@ import { colors } from "../theme/colors";
 import { strings } from "../strings";
 import { FALLBACK_ARTWORK_URI } from "../utils/constants";
 import { formatTime } from "../utils/util";
+import {
+  getResponsiveFontSize,
+  getResponsivePadding,
+  scaleSize,
+} from "../utils/responsive";
 
 type TrackPlayerProps = {
   trackId: string;
@@ -195,31 +200,31 @@ const styles = StyleSheet.create({
   unavailableContainer: {
     borderRadius: 16,
     backgroundColor: colors.yellow50,
-    padding: 16,
+    padding: getResponsivePadding(16),
     gap: 8,
   },
   unavailableTitle: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     fontWeight: "700",
     color: colors.warning,
   },
   unavailableSubtitle: {
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
     color: colors.yellow600,
   },
   container: {
     borderRadius: 16,
     backgroundColor: colors.player.background,
-    padding: 16,
-    gap: 16,
+    padding: getResponsivePadding(16),
+    gap: getResponsivePadding(16),
   },
   header: {
     flexDirection: "row",
-    gap: 16,
+    gap: getResponsivePadding(16),
   },
   artwork: {
-    width: 88,
-    height: 88,
+    width: scaleSize(88),
+    height: scaleSize(88),
     borderRadius: 12,
     backgroundColor: colors.player.surface,
   },
@@ -230,17 +235,17 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.player.text,
-    fontSize: 18,
+    fontSize: getResponsiveFontSize(18, 22),
     fontWeight: "700",
   },
   artist: {
     color: colors.player.textSecondary,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14, 16),
     fontWeight: "500",
   },
   album: {
     color: colors.player.textTertiary,
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
   },
   progressContainer: {
     gap: 8,
@@ -261,7 +266,7 @@ const styles = StyleSheet.create({
   },
   progressLabel: {
     color: colors.player.textSecondary,
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
   },
   controlsRow: {
     flexDirection: "row",
@@ -269,28 +274,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   primaryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingHorizontal: getResponsivePadding(24),
+    paddingVertical: getResponsivePadding(12),
     borderRadius: 999,
     backgroundColor: colors.primary,
-    minWidth: 96,
+    minWidth: scaleSize(96),
     alignItems: "center",
     justifyContent: "center",
   },
   primaryButtonText: {
     color: colors.white,
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16, 18),
     fontWeight: "700",
   },
   secondaryButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: getResponsivePadding(16),
+    paddingVertical: getResponsivePadding(10),
     borderRadius: 999,
     backgroundColor: colors.player.surface,
   },
   secondaryButtonText: {
     color: colors.player.text,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14, 16),
     fontWeight: "600",
   },
 });

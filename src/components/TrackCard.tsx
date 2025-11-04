@@ -3,6 +3,11 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme/colors";
 import { FALLBACK_IMAGE } from "../utils/constants";
+import {
+  getResponsiveFontSize,
+  getResponsivePadding,
+  scaleSize,
+} from "../utils/responsive";
 
 interface TrackCardProps {
   title: string;
@@ -44,7 +49,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: getResponsivePadding(12),
     borderRadius: 12,
     backgroundColor: colors.surface,
     shadowColor: colors.black,
@@ -53,23 +58,23 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   image: {
-    width: 64,
-    height: 64,
+    width: scaleSize(64),
+    height: scaleSize(64),
     borderRadius: 8,
     backgroundColor: colors.gray200,
   },
   meta: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: getResponsivePadding(12),
   },
   title: {
-    fontSize: 16,
+    fontSize: getResponsiveFontSize(16),
     fontWeight: "600",
     color: colors.text.primary,
   },
   artist: {
     marginTop: 4,
-    fontSize: 14,
+    fontSize: getResponsiveFontSize(14),
     color: colors.text.secondary,
   },
 });

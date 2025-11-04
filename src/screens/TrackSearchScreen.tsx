@@ -12,6 +12,11 @@ import TrackSkeletonList from "../components/TrackSkeletonList";
 import type { TrackEntity } from "../features/tracks";
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
+import {
+  getResponsiveFontSize,
+  getResponsivePadding,
+  SCREEN_DIMENSIONS,
+} from "../utils/responsive";
 
 type TrackSearchScreenProps = {
   searchText: string;
@@ -140,6 +145,8 @@ const TrackSearchScreen = ({
 
 export default memo(TrackSearchScreen);
 
+const maxWidth = SCREEN_DIMENSIONS.isTablet ? 800 : undefined;
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -147,29 +154,32 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingHorizontal: getResponsivePadding(16),
+    paddingTop: getResponsivePadding(12),
+    maxWidth,
+    alignSelf: "center",
+    width: "100%",
   },
   heading: {
-    fontSize: 24,
+    fontSize: getResponsiveFontSize(24, 32),
     fontWeight: "700",
     color: colors.text.primary,
-    marginBottom: 12,
+    marginBottom: getResponsivePadding(12),
   },
   listContent: {
-    paddingVertical: 16,
-    gap: 12,
+    paddingVertical: getResponsivePadding(16),
+    gap: getResponsivePadding(12),
     flexGrow: 1,
   },
   separator: {
-    height: 12,
+    height: getResponsivePadding(12),
   },
   footerHint: {
-    paddingVertical: 12,
+    paddingVertical: getResponsivePadding(12),
     alignItems: "center",
   },
   footerHintText: {
-    fontSize: 12,
+    fontSize: getResponsiveFontSize(12),
     color: colors.text.tertiary,
   },
 });
