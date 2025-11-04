@@ -1,10 +1,12 @@
 import type { TrackDetail as ApiTrackDetail, TrackListItem } from "../../api/tracks";
+import type { RequestStatus } from "../../types/common";
 
 export type TrackEntity = TrackListItem;
 
 export interface TrackDetail extends ApiTrackDetail {}
 
-export type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
+// Re-export for backwards compatibility
+export type { RequestStatus };
 
 export interface QueryPageState {
   [offset: string]: string[];

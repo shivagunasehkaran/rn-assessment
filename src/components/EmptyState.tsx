@@ -2,10 +2,9 @@ import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme/colors";
+import type { MessageProps } from "../types/ui";
 
-interface EmptyStateProps {
-  message: string;
-}
+interface EmptyStateProps extends MessageProps {}
 
 const EmptyStateComponent = ({ message }: EmptyStateProps) => {
   return (

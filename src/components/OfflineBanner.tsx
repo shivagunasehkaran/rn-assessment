@@ -3,10 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
+import type { VisibleProps } from "../types/ui";
 
-interface OfflineBannerProps {
-  visible: boolean;
-}
+interface OfflineBannerProps extends VisibleProps {}
 
 const OfflineBannerComponent = ({ visible }: OfflineBannerProps) => {
   if (!visible) {

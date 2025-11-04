@@ -3,11 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
-
-interface ErrorStateProps {
-  message: string;
-  onRetry?: () => void;
-}
+import type { ErrorStateProps } from "../types/ui";
 
 const ErrorStateComponent = ({ message, onRetry }: ErrorStateProps) => {
   return (

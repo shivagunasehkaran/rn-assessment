@@ -1,14 +1,13 @@
 import { memo } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-interface LoaderProps {
-  size?: number | "small" | "large";
-}
+import { colors } from "../theme/colors";
+import type { LoaderProps } from "../types/ui";
 
 const LoaderComponent = ({ size = "small" }: LoaderProps) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={size} color="#111827" />
+      <ActivityIndicator size={size} color={colors.text.primary} />
     </View>
   );
 };
