@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 interface SearchBarProps {
   value: string;
@@ -22,6 +22,17 @@ const SearchBarComponent = ({ value, placeholder, onChangeText, autoFocus }: Sea
         clearButtonMode="while-editing"
         returnKeyType="search"
       />
+      {Platform.OS === "android" && value ? (
+        <Pressable
+          onPress={() => onChangeText("")}
+          accessibilityRole="button"
+          accessibilityLabel="Clear search text"
+          style={styles.clearButton}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Text style={styles.clearText}>×</Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 };
@@ -34,10 +45,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
+    flex: 1,
     fontSize: 16,
     color: "#111827",
+    paddingRight: 8,
+  },
+  clearButton: {
+    marginLeft: 4,
+  },
+  clearText: {
+    fontSize: 18,
+    color: "#9ca3af",
+    lineHeight: 18,
   },
 });
 
