@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useNetInfo } from "@react-native-community/netinfo";
 
@@ -47,52 +47,75 @@ export function useTrackSearch(): UseTrackSearchResult {
 
   const trimmedQuery = useMemo(() => debouncedQuery.trim(), [debouncedQuery]);
   const hasActiveQuery = trimmedQuery.length > 0;
+  const lastFetchedQueryRef = useRef<string>("");
 
   useEffect(() => {
     if (!trimmedQuery) {
       if (storedQuery !== "") {
         dispatch(tracksThunks.updateSearchQuery("", true));
+        lastFetchedQueryRef.current = "";
       }
       return;
     }
 
-    const shouldReset = trimmedQuery !== storedQuery;
-
-    if (shouldReset) {
+    // Only fetch if debounced query changed AND we haven't already fetched this query
+    if (
+      trimmedQuery !== storedQuery &&
+      trimmedQuery !== lastFetchedQueryRef.current
+    ) {
+      lastFetchedQueryRef.current = trimmedQuery;
       dispatch(tracksThunks.updateSearchQuery(trimmedQuery, true));
+      dispatch(
+        tracksThunks.fetchTracksPage({
+          query: trimmedQuery,
+          offset: 0,
+          limit: JAMENDO_DEFAULT_LIMIT,
+          force: true,
+        })
+      );
     }
-
-    dispatch(
-      tracksThunks.fetchTracksPage({
-        query: trimmedQuery,
-        offset: 0,
-        limit: JAMENDO_DEFAULT_LIMIT,
-        force: shouldReset,
-      })
-    );
   }, [trimmedQuery, storedQuery, dispatch]);
 
-  const trackIds = useAppSelector((state) => selectTrackIdsByQuery(state, storedQuery));
-  const tracks = useAppSelector((state) => selectTracksByQuery(state, storedQuery));
-
-  const { offsets, lastOffset, hasMore } = useAppSelector((state) =>
+  // Batch selectors to reduce re-renders - use separate selectors but memoize
+  const trackIds = useAppSelector((state) =>
+    selectTrackIdsByQuery(state, storedQuery)
+  );
+  const tracks = useAppSelector((state) =>
+    selectTracksByQuery(state, storedQuery)
+  );
+  const paginationMeta = useAppSelector((state) =>
     selectPaginationMetaByQuery(state, storedQuery)
   );
-
   const listKey = useMemo(() => makeListKey(storedQuery, 0), [storedQuery]);
-  const listStatus = useAppSelector((state) => selectStatusByKey(state, listKey));
+  const listStatus = useAppSelector((state) =>
+    selectStatusByKey(state, listKey)
+  );
   const listError = useAppSelector((state) => selectErrorByKey(state, listKey));
 
-  const isInitialLoading = listStatus === "loading" && trackIds.length === 0 && hasActiveQuery;
-  const isRefreshing = listStatus === "loading" && trackIds.length > 0;
+  const nextOffset = useMemo(
+    () =>
+      paginationMeta.lastOffset >= 0
+        ? paginationMeta.lastOffset + JAMENDO_DEFAULT_LIMIT
+        : 0,
+    [paginationMeta.lastOffset]
+  );
+  const nextKey = useMemo(
+    () => makeListKey(storedQuery, nextOffset),
+    [storedQuery, nextOffset]
+  );
+  const nextStatus = useAppSelector((state) =>
+    selectStatusByKey(state, nextKey)
+  );
 
-  const nextOffset = lastOffset >= 0 ? lastOffset + JAMENDO_DEFAULT_LIMIT : 0;
-  const nextKey = useMemo(() => makeListKey(storedQuery, nextOffset), [storedQuery, nextOffset]);
-  const nextStatus = useAppSelector((state) => selectStatusByKey(state, nextKey));
+  const { offsets, hasMore } = paginationMeta;
+  const isInitialLoading =
+    listStatus === "loading" && trackIds.length === 0 && hasActiveQuery;
+  const isRefreshing = listStatus === "loading" && trackIds.length > 0;
   const isFetchingMore = hasMore && nextStatus === "loading";
 
   const isOffline = useMemo(
-    () => netInfo.isConnected === false || netInfo.isInternetReachable === false,
+    () =>
+      netInfo.isConnected === false || netInfo.isInternetReachable === false,
     [netInfo.isConnected, netInfo.isInternetReachable]
   );
 
@@ -111,11 +134,21 @@ export function useTrackSearch(): UseTrackSearchResult {
     );
   }, [dispatch, trimmedQuery]);
 
+  const loadingMoreRef = useRef(false);
+
+  useEffect(() => {
+    // Reset loading ref when fetching completes
+    if (!isFetchingMore) {
+      loadingMoreRef.current = false;
+    }
+  }, [isFetchingMore]);
+
   const handleLoadMore = useCallback(() => {
-    if (!trimmedQuery || !hasMore || isFetchingMore) {
+    if (!trimmedQuery || !hasMore || isFetchingMore || loadingMoreRef.current) {
       return;
     }
 
+    loadingMoreRef.current = true;
     dispatch(
       tracksThunks.fetchTracksPage({
         query: trimmedQuery,
@@ -160,4 +193,3 @@ export function useTrackSearch(): UseTrackSearchResult {
 }
 
 export default useTrackSearch;
-

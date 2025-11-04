@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 import {
   Image,
   Linking,
@@ -87,17 +87,17 @@ const TrackDetailScreenComponent = ({
     );
   }
 
-  const handleShare = () => {
+  const handleShare = useCallback(() => {
     if (detail?.shareUrl) {
       Linking.openURL(detail.shareUrl).catch(() => undefined);
     }
-  };
+  }, [detail?.shareUrl]);
 
-  const handleLicense = () => {
+  const handleLicense = useCallback(() => {
     if (detail?.licenseUrl) {
       Linking.openURL(detail.licenseUrl).catch(() => undefined);
     }
-  };
+  }, [detail?.licenseUrl]);
 
   return (
     <SafeAreaView style={styles.safeArea}>

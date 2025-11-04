@@ -3,7 +3,7 @@ import { JAMENDO_BASE_URL } from "./constants";
 
 const clientId = process.env.EXPO_PUBLIC_JAMENDO_CLIENT_ID;
 
-if (!clientId) {
+if (__DEV__ && !clientId) {
   // eslint-disable-next-line no-console
   console.warn(
     "EXPO_PUBLIC_JAMENDO_CLIENT_ID is not set. Jamendo API requests will fail until it is provided."

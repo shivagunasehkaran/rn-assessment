@@ -47,14 +47,19 @@ const TrackSearchScreen = ({
   showLoadMoreHint,
 }: TrackSearchScreenProps) => {
   const renderItem = useCallback(
-    ({ item }: { item: TrackEntity }) => (
-      <TrackCard
-        title={item.name}
-        artist={item.artistName}
-        imageUrl={item.imageUrl}
-        onPress={() => onSelectTrack(item.id)}
-      />
-    ),
+    ({ item }: { item: TrackEntity }) => {
+      const handlePress = () => {
+        onSelectTrack(item.id);
+      };
+      return (
+        <TrackCard
+          title={item.name}
+          artist={item.artistName}
+          imageUrl={item.imageUrl}
+          onPress={handlePress}
+        />
+      );
+    },
     [onSelectTrack]
   );
 
@@ -84,7 +89,9 @@ const TrackSearchScreen = ({
     if (showLoadMoreHint) {
       return (
         <View style={styles.footerHint}>
-          <Text style={styles.footerHintText}>{strings.searchScrollToLoadMore}</Text>
+          <Text style={styles.footerHintText}>
+            {strings.searchScrollToLoadMore}
+          </Text>
         </View>
       );
     }
@@ -166,4 +173,3 @@ const styles = StyleSheet.create({
     color: colors.text.tertiary,
   },
 });
-
