@@ -1,0 +1,275 @@
+import { memo, useMemo } from "react";
+import {
+  Image,
+  Linking,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import ErrorState from "../components/ErrorState";
+import Loader from "../components/Loader";
+import OfflineBanner from "../components/OfflineBanner";
+import TrackPlayer from "../components/TrackPlayer";
+import type { TrackDetail, TrackEntity } from "../features/tracks";
+
+type TrackDetailScreenProps = {
+  track?: TrackEntity | TrackDetail;
+  detail?: TrackDetail;
+  isLoading: boolean;
+  isRefreshing: boolean;
+  error: string | null;
+  isOffline: boolean;
+  onRetry: () => void;
+  onBack: () => void;
+};
+
+const formatDuration = (seconds?: number): string => {
+  if (!seconds || seconds <= 0) {
+    return "—";
+  }
+  const totalSeconds = Math.floor(seconds);
+  const minutes = Math.floor(totalSeconds / 60);
+  const remainder = totalSeconds % 60;
+  return `${minutes}m ${remainder.toString().padStart(2, "0")}s`;
+};
+
+const formatReleaseDate = (iso?: string | null): string => {
+  if (!iso) {
+    return "—";
+  }
+
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) {
+    return iso;
+  }
+
+  return parsed.toLocaleDateString();
+};
+
+const TrackDetailScreenComponent = ({
+  track,
+  detail,
+  isLoading,
+  isRefreshing,
+  error,
+  isOffline,
+  onRetry,
+  onBack,
+}: TrackDetailScreenProps) => {
+  const imageSource = track?.imageUrl
+    ? { uri: track.imageUrl }
+    : require("../../assets/icon.png");
+
+  const metadata = useMemo(
+    () => [
+      { label: "Album", value: detail?.albumName ?? "—" },
+      { label: "Duration", value: formatDuration(detail?.duration) },
+      { label: "Released", value: formatReleaseDate(detail?.releaseDate) },
+    ],
+    [detail?.albumName, detail?.duration, detail?.releaseDate]
+  );
+
+  if (!track && isLoading) {
+    return (
+      <SafeAreaView style={styles.fallbackContainer}>
+        <Loader size="large" />
+      </SafeAreaView>
+    );
+  }
+
+  if (!track && error) {
+    return (
+      <SafeAreaView style={styles.fallbackContainer}>
+        <ErrorState message={error} onRetry={onRetry} />
+      </SafeAreaView>
+    );
+  }
+
+  if (!track) {
+    return (
+      <SafeAreaView style={styles.fallbackContainer}>
+        <ErrorState message="Track not found." onRetry={onBack} />
+      </SafeAreaView>
+    );
+  }
+
+  const handleShare = () => {
+    if (detail?.shareUrl) {
+      Linking.openURL(detail.shareUrl).catch(() => undefined);
+    }
+  };
+
+  const handleLicense = () => {
+    if (detail?.licenseUrl) {
+      Linking.openURL(detail.licenseUrl).catch(() => undefined);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <OfflineBanner visible={isOffline} />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Pressable style={styles.backLink} onPress={onBack}>
+          <Text style={styles.backText}>{"‹ Back"}</Text>
+        </Pressable>
+
+        <Image source={imageSource} style={styles.heroArtwork} resizeMode="cover" />
+
+        <View style={styles.header}>
+          <Text style={styles.title}>{track.name}</Text>
+          <Text style={styles.subtitle}>{track.artistName}</Text>
+        </View>
+
+        <TrackPlayer
+          trackId={track.id}
+          title={track.name}
+          artist={track.artistName}
+          album={detail?.albumName}
+          audioUrl={track.audioUrl}
+          artworkUrl={track.imageUrl}
+          durationMs={detail?.duration ? detail.duration * 1000 : undefined}
+        />
+
+        <View style={styles.metadataSection}>
+          <Text style={styles.sectionHeading}>Track Info</Text>
+          <View style={styles.metadataGrid}>
+            {metadata.map((entry) => (
+              <View key={entry.label} style={styles.metadataItem}>
+                <Text style={styles.metadataLabel}>{entry.label}</Text>
+                <Text style={styles.metadataValue}>{entry.value}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.linksRow}>
+            {detail?.licenseUrl ? (
+              <Pressable style={styles.linkButton} onPress={handleLicense}>
+                <Text style={styles.linkText}>View License</Text>
+              </Pressable>
+            ) : null}
+            {detail?.shareUrl ? (
+              <Pressable style={styles.linkButton} onPress={handleShare}>
+                <Text style={styles.linkText}>Open on Jamendo</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        </View>
+
+        {isRefreshing ? (
+          <View style={styles.refreshing}>
+            <Loader size="small" />
+            <Text style={styles.refreshingText}>Refreshing track details…</Text>
+          </View>
+        ) : null}
+
+        {error && track ? <ErrorState message={error} onRetry={onRetry} /> : null}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default memo(TrackDetailScreenComponent);
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9fafb",
+  },
+  scrollContent: {
+    padding: 16,
+    gap: 24,
+  },
+  fallbackContainer: {
+    flex: 1,
+    backgroundColor: "#f9fafb",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+  },
+  backLink: {
+    alignSelf: "flex-start",
+    paddingVertical: 4,
+  },
+  backText: {
+    color: "#2563eb",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  heroArtwork: {
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 20,
+    backgroundColor: "#e5e7eb",
+  },
+  header: {
+    gap: 8,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#111827",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#6b7280",
+    fontWeight: "500",
+  },
+  metadataSection: {
+    gap: 16,
+  },
+  sectionHeading: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#111827",
+  },
+  metadataGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+  },
+  metadataItem: {
+    width: "48%",
+    gap: 4,
+  },
+  metadataLabel: {
+    color: "#6b7280",
+    fontSize: 12,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  metadataValue: {
+    color: "#111827",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  linksRow: {
+    flexDirection: "row",
+    gap: 12,
+    flexWrap: "wrap",
+  },
+  linkButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: "#e0f2fe",
+  },
+  linkText: {
+    color: "#0369a1",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  refreshing: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  refreshingText: {
+    color: "#6b7280",
+    fontSize: 14,
+  },
+});
+
