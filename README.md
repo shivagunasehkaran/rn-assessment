@@ -200,11 +200,34 @@ Ran out of time, so here's what I'd tackle next:
 
 ## Demo
 
-Videos and screenshots will be added here showing:
+Videos and screenshots added here showing:
 - Search functionality and infinite scroll
 - Track detail screen and audio player
-- Offline mode with cached results
-- Error handling and retry flows
+
+iOS :
+
+https://github.com/user-attachments/assets/2702e36e-369c-4089-bbe8-857fd10b3adf
+
+Android :
+
+https://github.com/user-attachments/assets/b0ab7ea8-2d98-4e0f-a97d-4554e7293ce6
+
+
+Screenshots :
+
+iOS :
+
+<img width="200" height="450" alt="Simulator Screenshot - iPhone 16 - 2025-11-05 at 01 38 22" src="https://github.com/user-attachments/assets/61cc2d74-c975-45c0-90e7-4f7000740c8b" />
+<img width="200" height="450" alt="Simulator Screenshot - iPhone 16 - 2025-11-05 at 01 38 15" src="https://github.com/user-attachments/assets/26f0245d-e7af-47a7-bef5-7ca70e58f233" />
+<img width="200" height="450" alt="Simulator Screenshot - iPhone 16 - 2025-11-05 at 01 38 04" src="https://github.com/user-attachments/assets/a143e743-b695-412a-a964-4aef12bd1467" />
+<img width="200" height="450" alt="Simulator Screenshot - iPhone 16 - 2025-11-05 at 01 37 53" src="https://github.com/user-attachments/assets/d284ee65-2921-4519-9052-07ebce09d8e4" />
+
+Android:
+
+<img width="200" height="450" alt="Screenshot 2025-11-05 at 1 57 27 AM" src="https://github.com/user-attachments/assets/1f06bc55-08c2-473f-83eb-8b3c82332143" />
+<img width="200" height="450" alt="Screenshot 2025-11-05 at 1 57 46 AM" src="https://github.com/user-attachments/assets/f70b2d9e-ea75-4cda-8d25-e9e74cdbce09" />
+<img width="200" height="450" alt="Screenshot 2025-11-05 at 1 58 14 AM" src="https://github.com/user-attachments/assets/4b93c683-f611-4d65-a9bc-967f8c38bfd9" />
+
 
 ## Known Limitations
 
