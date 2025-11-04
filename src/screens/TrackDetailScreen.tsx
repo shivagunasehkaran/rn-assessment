@@ -17,6 +17,8 @@ import TrackPlayer from "../components/TrackPlayer";
 import type { TrackDetail, TrackEntity } from "../features/tracks";
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
+import { formatDuration, formatReleaseDate } from "../utils/util";
+import { FALLBACK_ARTWORK_URI } from "../utils/constants";
 
 type TrackDetailScreenProps = {
   track?: TrackEntity | TrackDetail;
@@ -27,29 +29,6 @@ type TrackDetailScreenProps = {
   isOffline: boolean;
   onRetry: () => void;
   onBack: () => void;
-};
-
-const formatDuration = (seconds?: number): string => {
-  if (!seconds || seconds <= 0) {
-    return "—";
-  }
-  const totalSeconds = Math.floor(seconds);
-  const minutes = Math.floor(totalSeconds / 60);
-  const remainder = totalSeconds % 60;
-  return `${minutes}m ${remainder.toString().padStart(2, "0")}s`;
-};
-
-const formatReleaseDate = (iso?: string | null): string => {
-  if (!iso) {
-    return "—";
-  }
-
-  const parsed = new Date(iso);
-  if (Number.isNaN(parsed.getTime())) {
-    return iso;
-  }
-
-  return parsed.toLocaleDateString();
 };
 
 const TrackDetailScreenComponent = ({
@@ -64,13 +43,22 @@ const TrackDetailScreenComponent = ({
 }: TrackDetailScreenProps) => {
   const imageSource = track?.imageUrl
     ? { uri: track.imageUrl }
-    : require("../../assets/icon.png");
+    : FALLBACK_ARTWORK_URI;
 
   const metadata = useMemo(
     () => [
-      { label: strings.trackDetailMetadata.album, value: detail?.albumName ?? "—" },
-      { label: strings.trackDetailMetadata.duration, value: formatDuration(detail?.duration) },
-      { label: strings.trackDetailMetadata.released, value: formatReleaseDate(detail?.releaseDate) },
+      {
+        label: strings.trackDetailMetadata.album,
+        value: detail?.albumName ?? "—",
+      },
+      {
+        label: strings.trackDetailMetadata.duration,
+        value: formatDuration(detail?.duration),
+      },
+      {
+        label: strings.trackDetailMetadata.released,
+        value: formatReleaseDate(detail?.releaseDate),
+      },
     ],
     [detail?.albumName, detail?.duration, detail?.releaseDate]
   );
@@ -119,12 +107,6 @@ const TrackDetailScreenComponent = ({
           <Text style={styles.backText}>{strings.trackDetailBack}</Text>
         </Pressable>
 
-        <Image
-          source={imageSource}
-          style={styles.heroArtwork}
-          resizeMode="cover"
-        />
-
         <View style={styles.header}>
           <Text style={styles.title}>{track.name}</Text>
           <Text style={styles.subtitle}>{track.artistName}</Text>
@@ -154,12 +136,16 @@ const TrackDetailScreenComponent = ({
           <View style={styles.linksRow}>
             {detail?.licenseUrl ? (
               <Pressable style={styles.linkButton} onPress={handleLicense}>
-                <Text style={styles.linkText}>{strings.trackDetailActions.viewLicense}</Text>
+                <Text style={styles.linkText}>
+                  {strings.trackDetailActions.viewLicense}
+                </Text>
               </Pressable>
             ) : null}
             {detail?.shareUrl ? (
               <Pressable style={styles.linkButton} onPress={handleShare}>
-                <Text style={styles.linkText}>{strings.trackDetailActions.openOnJamendo}</Text>
+                <Text style={styles.linkText}>
+                  {strings.trackDetailActions.openOnJamendo}
+                </Text>
               </Pressable>
             ) : null}
           </View>
@@ -168,7 +154,9 @@ const TrackDetailScreenComponent = ({
         {isRefreshing ? (
           <View style={styles.refreshing}>
             <Loader size="small" />
-            <Text style={styles.refreshingText}>{strings.trackDetailRefreshing}</Text>
+            <Text style={styles.refreshingText}>
+              {strings.trackDetailRefreshing}
+            </Text>
           </View>
         ) : null}
 

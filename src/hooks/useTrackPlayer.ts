@@ -6,6 +6,7 @@ import {
   isAudioProAvailable,
   type AudioProStoreState,
 } from "../lib/audioPro";
+import { FALLBACK_ARTWORK_URI } from "../utils/constants";
 
 export type TrackPlayerConfig = {
   trackId: string;
@@ -50,10 +51,6 @@ type TrackPlayerAvailable = {
 
 type TrackPlayerResult = TrackPlayerUnavailable | TrackPlayerAvailable;
 
-const FALLBACK_ART_URI = Image.resolveAssetSource(
-  require("../../assets/icon.png")
-).uri;
-
 export const useTrackPlayer = (
   config: TrackPlayerConfig
 ): TrackPlayerResult => {
@@ -92,7 +89,7 @@ export const useTrackPlayer = (
     return durationMs && durationMs > 0 ? durationMs : 0;
   }, [duration, isCurrentTrack, durationMs]);
 
-  const artwork = artworkUrl ?? FALLBACK_ART_URI;
+  const artwork = artworkUrl ?? FALLBACK_ARTWORK_URI;
 
   const progressWidthRef = useRef(0);
 

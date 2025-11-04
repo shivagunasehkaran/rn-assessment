@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme/colors";
+import { FALLBACK_IMAGE } from "../utils/constants";
 
 interface TrackCardProps {
   title: string;
@@ -10,11 +11,18 @@ interface TrackCardProps {
   onPress: () => void;
 }
 
-const FALLBACK_IMAGE = "https://placehold.co/64x64?text=♪";
-
-const TrackCardComponent = ({ title, artist, imageUrl, onPress }: TrackCardProps) => {
+const TrackCardComponent = ({
+  title,
+  artist,
+  imageUrl,
+  onPress,
+}: TrackCardProps) => {
   return (
-    <Pressable style={styles.card} onPress={onPress} android_ripple={{ color: colors.gray200 }}>
+    <Pressable
+      style={styles.card}
+      onPress={onPress}
+      android_ripple={{ color: colors.gray200 }}
+    >
       <Image
         source={{ uri: imageUrl || FALLBACK_IMAGE }}
         style={styles.image}
@@ -69,4 +77,3 @@ const styles = StyleSheet.create({
 export const TrackCard = memo(TrackCardComponent);
 
 export default TrackCard;
-

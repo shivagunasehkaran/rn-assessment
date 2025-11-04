@@ -11,6 +11,8 @@ import {
 import { useTrackPlayer } from "../hooks/useTrackPlayer";
 import { colors } from "../theme/colors";
 import { strings } from "../strings";
+import { FALLBACK_ARTWORK_URI } from "../utils/constants";
+import { formatTime } from "../utils/util";
 
 type TrackPlayerProps = {
   trackId: string;
@@ -20,22 +22,6 @@ type TrackPlayerProps = {
   audioUrl: string;
   artworkUrl?: string | null;
   durationMs?: number;
-};
-
-const FALLBACK_ARTWORK_URI = Image.resolveAssetSource(
-  require("../../assets/icon.png")
-).uri;
-
-const formatTime = (milliseconds: number): string => {
-  if (!Number.isFinite(milliseconds) || milliseconds <= 0) {
-    return "0:00";
-  }
-
-  const totalSeconds = Math.floor(milliseconds / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
 const TrackPlayerComponent = ({
