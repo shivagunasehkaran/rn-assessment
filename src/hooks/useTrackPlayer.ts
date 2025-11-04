@@ -78,10 +78,10 @@ export const useTrackPlayer = (
   const { AudioPro, AudioProContentType, AudioProState, useAudioPro } =
     audioProBindings;
 
-  const playerState = useAudioPro((s: AudioProStoreState) => s.state);
+  const playerState = useAudioPro((s: AudioProStoreState) => s.playerState);
   const position = useAudioPro((s: AudioProStoreState) => s.position);
   const duration = useAudioPro((s: AudioProStoreState) => s.duration);
-  const playingTrack = useAudioPro((s: AudioProStoreState) => s.playingTrack);
+  const playingTrack = useAudioPro((s: AudioProStoreState) => s.trackPlaying);
 
   const isCurrentTrack = playingTrack?.id === trackId;
   const isPlaying = isCurrentTrack && playerState === AudioProState.PLAYING;

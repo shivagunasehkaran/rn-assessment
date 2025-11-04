@@ -4,16 +4,16 @@ type AudioProModule = typeof import("react-native-audio-pro");
 
 // Define the AudioPro store state shape
 export type AudioProStoreState = {
-  state: string; // AudioProState enum value
+  playerState: string; // AudioProState enum value
   position: number;
   duration: number;
-  playingTrack: {
+  trackPlaying: {
     id: string;
     url: string;
     title: string;
-    artist: string;
+    artist?: string;
     album?: string;
-    artwork?: string;
+    artwork: string;
   } | null;
 };
 
